@@ -14,3 +14,10 @@ class BookSpider(scrapy.Spider):
             item["title"] = book.css("h3 > a::attr(title)").get()
             item["price"] = book.css(".price_color::text").get()
             yield item#把這一筆書籍資料「交給 Scrapy」 
+
+        next_page = response.css("li.next > a::attr(href)").get()
+        if next_page:
+            next_page_url = response.urljoin(next_page)#把相對網址變成完整網址
+            #告訴 Scrapy：去抓 next_page_url抓回來後，再交給 parse() 處理一次
+            yield scrapy.Request(url=next_page_url, callback=self.parse)
+            
