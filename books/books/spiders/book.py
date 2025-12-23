@@ -8,7 +8,7 @@ class BookSpider(scrapy.Spider):
     start_urls = ["https://books.toscrape.com/"]
 
     def parse(self, response):#response = 抓回來的 HTML 包裝物件
-        for book in response.css(".article.product_pod"):
+        for book in response.css("article.product_pod"):
             item = BooksItem()
             item["url"] = book.css("h3 > a::attr(href)").get()
             item["title"] = book.css("h3 > a::attr(title)").get()
