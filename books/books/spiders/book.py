@@ -10,13 +10,20 @@ class BookSpider(scrapy.Spider):
     def start_requests(self):#use .log_error() for the initial request to Books to Scrape
         for url in self.start_urls:
             yield scrapy.Request(
-                url, callback=self.parse, errorback=self.log_error
+                url, callback=self.parse, errback=self.log_error
             )
 
     def log_error(self, failure):
         self.logger.error(repr(failure))
 
     def parse(self, response):#response = 抓回來的 HTML 包裝物件
+        #Sign Some Spider Contracts in order to Enable Testing
+        """
+        @url https://books.toscrape.com/
+        @returns items 20 20
+        @returns requests 1 50
+        @scrapes url title price
+        """
         for book in response.css("article.product_pod"):
             item = BooksItem()
             item["url"] = book.css("h3 > a::attr(href)").get()
@@ -34,6 +41,6 @@ class BookSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=next_page_url,
                 callback=self.parse,
-                errorback=self.log_error
+                errback=self.log_error
             )
             
