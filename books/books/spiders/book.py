@@ -18,6 +18,9 @@ class BookSpider(scrapy.Spider):
         next_page = response.css("li.next > a::attr(href)").get()
         if next_page:
             next_page_url = response.urljoin(next_page)#把相對網址變成完整網址
+            self.logger.info(
+                f"navigating to next page with URL {next_page_url}"
+            )
             #告訴 Scrapy：去抓 next_page_url抓回來後，再交給 parse() 處理一次
             yield scrapy.Request(url=next_page_url, callback=self.parse)
             
