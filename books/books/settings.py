@@ -58,6 +58,8 @@ DOWNLOAD_DELAY = 1
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+#Scrapy 的完整資料流:Spider(yield item)>Item Pipeline啟動(MongoPipeline.process_item())>資料被存進 MongoDB
+#沒有 ITEM_PIPELINES，中間那段完全不會發生，300是優先順序
 ITEM_PIPELINES = {
     "books.pipelines.MongoPipeline": 300,
 }
