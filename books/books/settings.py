@@ -17,6 +17,7 @@ ADDONS = {}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "books (+http://www.yourdomain.com)"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -49,6 +50,11 @@ DOWNLOAD_DELAY = 1
 #DOWNLOADER_MIDDLEWARES = {
 #    "books.middlewares.BooksDownloaderMiddleware": 543,
 #}
+#用 Middleware 輪替 User-Agent（以及 Proxy）來降低被封鎖的風險
+DOWNLOADER_MIDDLEWARES = {
+    "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware": None,
+    "scrapy_user_agents.middlewares.RandomUserAgentMiddleware": 400,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -96,3 +102,8 @@ MONGO_DATABASE = "books_db"
 # Set log level
 LOG_LEVEL = "WARNING"
 LOG_FILE = "book_scraper.log"
+
+#introduce delays between requests, which can also help 
+# to avoid triggering anti-bot measures
+DOWNLOAD_DELAY = 2
+
